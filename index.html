@@ -22,6 +22,10 @@
   </style>
 </head>
 <body>
+   <!-- Audio Tag connected to your uploaded song -->
+  <audio id="weddingMusic" loop preload="auto">
+    <source src="Kalyanam%20Vybhogam.mp3" type="audio/mpeg">
+  </audio>
   <div class="opening" id="opening" aria-label="Welcome screen"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><div class="opening-card"><div class="om">ॐ</div><p>Śrī Gaṇeśāya Namaḥ</p><h1 style="font-family:'Noto Serif Telugu','Playfair Display',serif;line-height:1.35">గంగుమళ్ళ వారి<br>వివాహ ఆహ్వానం</h1><button class="enter" id="enter">Open Invitation</button></div></div>
   <main>
     <header class="hero"><div class="thoranam"><div class="leaves"></div></div><div class="bell left">♢</div><div class="bell right">♢</div>
@@ -33,9 +37,31 @@
     <section class="venue reveal"><p class="section-label">Venue</p><h2 class="title">Vijay Function Hall</h2><div class="divider">✦ ❖ ✦</div><p>Ramachandrapuram</p><p>We would be honoured by your presence and blessings.</p><a class="map" href="https://www.google.com/maps/search/?api=1&query=Vijay+Function+Hall+Ramachandrapuram" target="_blank" rel="noopener">Open in Google Maps</a></section>
     <section class="blessing reveal"><p class="section-label">With warm regards</p><p class="telugu">అందరూ వచ్చి వధూవరులను ఆశీర్వదించాలని మా హృదయపూర్వక కోరిక</p><div class="divider">✦ ❖ ✦</div><p class="parents">Shri. Gangumalla Satyanarayana Das<br>Smt. Alivelu Manga Devi</p><p class="footer">Sudha &amp; Vinay ·3rd sep 2026</p></section>
   </main>
+
+  <!-- Audio playback script -->
   <script>
-    const opening=document.getElementById('opening'); document.getElementById('enter').addEventListener('click',()=>opening.classList.add('hide'));
-    const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');observer.unobserve(e.target)}}),{threshold:.15});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+    const audio = document.getElementById('weddingMusic');
+    const opening=document.getElementById('opening'); // Plays music when user clicks "Open Invitation"
+   document.getElementById('enter').addEventListener('click', () => {
+      opening.classList.add('hide');
+      audio.play().catch(() => {});
+    });
+
+    // Fallback: starts music on first touch/click/scroll if screen is bypassed
+    const startAudio = () => {
+      audio.play().catch(() => {});
+      ['click', 'touchstart', 'scroll'].forEach(evt => window.removeEventListener(evt, startAudio));
+    };
+    ['click', 'touchstart', 'scroll'].forEach(evt => window.addEventListener(evt, startAudio, { passive: true, once: true }));
+
+    // Scroll reveal observer
+    const observer = new IntersectionObserver(entries => entries.forEach(e => {
+      if(e.isIntersecting) {
+        e.target.classList.add('show');
+        observer.unobserve(e.target);
+      }
+    }), { threshold: .15 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
